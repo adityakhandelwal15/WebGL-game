@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <title>WebGL Demo</title>
+    <!-- <link rel="stylesheet" href="../webgl.css" type="text/css"> -->
+    <script type="text/javascript">
+      function loadTexture(gl, url) {
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+
+  // Because images have to be download over the internet
+  // they might take a moment until they are ready.
+  // Until then put a single pixel in the texture so we can
+  // use it immediately. When the image has finished downloading
+  // we'll update the texture with the contents of the image.
+  const level = 0;
+  const internalFormat = gl.RGBA;
+  const width = 1;
+  const height = 1;
+  const border = 0;
+  const srcFormat = gl.RGBA;
+  const srcType = gl.UNSIGNED_BYTE;
+  const pixel = new Uint8Array([0, 0, 255, 255]);  // opaque blue
+  gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                width, height, border, srcFormat, srcType,
+                pixel);
+
+  const image = new Image();
+  image.onload = function() {
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+                  srcFormat, srcType, image);
+
+    // WebGL1 has different requirements for power of 2 images
+    // vs non power of 2 images so check if the image is a
+    // power of 2 in both dimensions.
+    if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+       // Yes, it's a power of 2. Generate mips.
+       gl.generateMipmap(gl.TEXTURE_2D);
+    } else {
+       // No, it's not a power of 2. Turn of mips and set
+       // wrapping to clamp to edge
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+  };
+  image.src = url;
+
+  return texture;
+}
+function isPowerOf2(value) {
+  return (value & (value - 1)) == 0;
+}
+    </script>
+  </head>
+
+  <body>
+    <section id="banner">
+        <h2><strong>Subway Surfer</strong><br> made in WebGL</h2>
+        <p>Graphics Assignment</p>
+        <p>Controls</p>
+        <ul>
+          <li>Left/Right -> Arrow Keys</li>
+          <li>Duck -> Down arrow Key</li>
+          <li>Jump -> w</li>
+        </ul>
+        <ul class="actions">
+          <li><a href="#" class="button special">Get started</a></li>
+        </ul>
+      </section>
+    <canvas id="glcanvas" width="1420" height="810"></canvas>
+
+    <!-- One -->
+      <section id="one" class="wrapper special">
+        <div class="inner">
+          <header class="major">
+            <h2>Dashboard</h2>
+          </header>
+          <div class="features">
+            <div class="feature">
+              <i class="fa fa-diamond"></i>
+              <h3>Score</h3>
+              <p id= 'scc'>Yet to display</p>
+            </div>
+            <div class="feature">
+              <i class="fa fa-copy"></i>
+              <h3>Coins</h3>
+              <p id='coin'>Yet to display</p>
+            </div>
+            <div class="feature">
+              <i class="fa fa-paper-plane-o"></i>
+              <h3>STATUS</h3>
+              <p id = 'status'>Ongoing</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Two -->
+
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+  <script src="./coin.js" ></script>
+  <script src="./boots.js" ></script>
+  <script src="./cubeprime.js" ></script>
+  <script src="./obs2.js" ></script>
+  <script src="./obs3.js" ></script>
+  <script src="./legs.js" ></script>
+  
+  <script src="./gl-matrix.js"></script>
+  <script src="./tracks.js"></script>
+  <script src="./player.js" ></script>
+  <script src="./p2.js" ></script>
+  <script src="./rail.js" ></script>
+  <script src="./wall.js" ></script>
+  <script src="./train.js" ></script>
+  <script src="./obstacle.js" ></script>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/skel.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+  <script src="assets/js/main.js"></script>
+
+  <script src="./main.js"></script>
+</html>
